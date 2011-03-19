@@ -1,0 +1,66 @@
+bash -c '
+(
+echo "export PS1=\"\\\\H:\\\\w\\\\\\$ \"" >> /etc/profile
+)
+
+echo <%= @config[:chef_node_name] %> > /tmp/chef_node_name
+
+PROPERHOSTNAME=`cat /tmp/chef_node_name | cut -d. -f1`
+PROPERDNSDOMAINNAME=`cat /tmp/chef_node_name | sed s/^$PROPERHOSTNAME.//` 
+
+IPV4ADDR=`ip addr | grep eth0 | grep "inet " | cut -d " " -f 6 | cut -d \/ -f 1`
+
+NETCONF="/etc/sysconfig/network"
+grep "^HOSTNAME=${PROPERHOSTNAME}$" ${NETCONF} || ( sed -i s/^HOSTNAME.*$// ${NETCONF} && echo "HOSTNAME=${PROPERHOSTNAME}" >> ${NETCONF})
+
+(
+cat <<EOF
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+${IPV4ADDR} ${PROPERHOSTNAME}.${PROPERDNSDOMAINNAME} ${PROPERHOSTNAME}
+EOF
+) > /etc/hosts
+
+hostname $PROPERHOSTNAME
+
+
+/sbin/service iptables stop
+/sbin/chkconfig iptables off
+rpm -Uvh http://yum.afistfulofservers.net/affs/fedora/13/noarch/affs-release-13-1.noarch.rpm
+
+yum clean all
+yum -y install libselinux-ruby
+yum -y install affs-chef
+yum -y install affs-ohai
+
+
+(
+cat <<'EOP'
+<%= IO.read(Chef::Config[:validation_key]) %>
+EOP
+) > /tmp/validation.pem
+awk NF /tmp/validation.pem > /etc/chef/validation.pem
+rm /tmp/validation.pem
+
+(
+cat <<'EOP'
+log_level        :info
+log_location     STDOUT
+chef_server_url  "<%= Chef::Config[:chef_server_url] %>"
+validation_client_name "<%= Chef::Config[:validation_client_name] %>"
+<% if @config[:chef_node_name] == nil %>
+# Using default node name"
+<% else %>
+node_name "<%= @config[:chef_node_name] %>"
+<% end %> 
+EOP
+) > /etc/chef/client.rb
+
+(
+cat <<'EOP'
+<%= { "run_list" => @run_list }.to_json %>
+EOP
+) > /etc/chef/first-boot.json
+
+/usr/bin/chef-client -j /etc/chef/first-boot.json
+'
