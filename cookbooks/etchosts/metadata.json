@@ -1,0 +1,29 @@
+{
+    "recipes": {
+    },
+    "license": "Apache 2.0",
+    "providing": {
+    },
+    "maintainer": "afistfulofservers",
+    "replacing": {
+    },
+    "version": "0.0.1",
+    "maintainer_email": "someara@afistfulofservers.com",
+    "description": "Installs/Configures etchosts",
+    "groupings": {
+    },
+    "recommendations": {
+    },
+    "attributes": {
+    },
+    "suggestions": {
+    },
+    "dependencies": {
+    },
+    "long_description": "= DESCRIPTION:\n\n= REQUIREMENTS:\n\n= ATTRIBUTES:\n\n= USAGE:\n\n",
+    "name": "etchosts",
+    "platforms": {
+    },
+    "conflicting": {
+    }
+  }

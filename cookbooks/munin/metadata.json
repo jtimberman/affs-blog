@@ -1,0 +1,32 @@
+{
+    "recipes": {
+    },
+    "license": "Apache 2.0",
+    "providing": {
+    },
+    "maintainer": "afistfulofservers",
+    "replacing": {
+    },
+    "version": "0.0.1",
+    "maintainer_email": "sean@afistfulofservers.com",
+    "description": "Installs/Configures kerberos",
+    "groupings": {
+    },
+    "recommendations": {
+    },
+    "attributes": {
+    },
+    "suggestions": {
+    },
+    "dependencies": {
+      "apache2": [
+
+      ]
+    },
+    "long_description": "= DESCRIPTION:\n\n= REQUIREMENTS:\n\n= ATTRIBUTES:\n\n= USAGE:\n\n",
+    "name": "munin",
+    "platforms": {
+    },
+    "conflicting": {
+    }
+  }
