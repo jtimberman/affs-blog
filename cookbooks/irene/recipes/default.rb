@@ -8,11 +8,11 @@
 #
 
 tub_of_water "poop_remover" do
-  action :create
+  action :remove
 end
 
 bucket "i_has_a_bucket" do
-  action :create
+  action :fill
 end
 
 
