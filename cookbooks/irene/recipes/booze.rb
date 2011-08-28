@@ -13,23 +13,24 @@
   end
 }
 
-(1..24).each { |i|
+99.downto(1).each { |i|
   bottles_of_beer "beer_bottle-#{i}" do
-    action :creat
+    action [:take_down, :pass_around]
+    not_if { ::Beer.kind_of?(PBR) }
   end
 }
 
 (1..1).each { |i|
   kegs_of_beer "keg-#{i}" do
     brand "twobrothers"
-    action :creat
+    action [:tap, :empty]
   end
 }
 
 (1..2).each { |i|
   bottles_of_whiskey "whiskey-#{i}" do
     type "fancy"
-    action :creat
+    action [:serve_neat, :drink]
   end
 }
 
